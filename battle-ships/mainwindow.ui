@@ -33,9 +33,9 @@
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>230</y>
-      <width>191</width>
+      <x>40</x>
+      <y>250</y>
+      <width>201</width>
       <height>231</height>
      </rect>
     </property>
@@ -66,6 +66,15 @@
        <property name="text">
         <string>Zakończ</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -84,22 +93,5 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>396</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>158</x>
-     <y>576</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

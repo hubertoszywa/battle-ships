@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,4 +23,13 @@ void MainWindow::on_pushButton_2_clicked()
 {
     rules = new Rules(this);
     rules->show();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    QString exitGameString = "Czy na pewno chcesz zakończyć grę Bitwa w Statki?";
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Zakończyć grę?", exitGameString, QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+         QApplication::quit();
 }
