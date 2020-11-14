@@ -40,9 +40,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         label_pic = new QLabel(centralwidget);
         label_pic->setObjectName(QString::fromUtf8("label_pic"));
-        label_pic->setGeometry(QRect(220, 280, 441, 261));
-        label_pic->setPixmap(QPixmap(QString::fromUtf8("assets/main-photo.png")));
-        label_pic->setScaledContents(true);
+        label_pic->setGeometry(QRect(120, 130, 481, 251));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -64,7 +62,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label_pic->setText(QString());
+        label_pic->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         menuBattle_ships->setTitle(QCoreApplication::translate("MainWindow", "Battle-ships", nullptr));
     } // retranslateUi
 
