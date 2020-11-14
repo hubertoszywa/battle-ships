@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Battle Ships</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -20,15 +20,55 @@
    <widget class="QLabel" name="label_pic">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>130</y>
-      <width>481</width>
-      <height>251</height>
+      <x>0</x>
+      <y>-60</y>
+      <width>800</width>
+      <height>600</height>
      </rect>
     </property>
     <property name="text">
      <string>TextLabel</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>230</y>
+      <width>191</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Nowa gra</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Zasady</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Autorzy</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>Zakończ</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -40,15 +80,26 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuBattle_ships">
-    <property name="title">
-     <string>Battle-ships</string>
-    </property>
-   </widget>
-   <addaction name="menuBattle_ships"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
