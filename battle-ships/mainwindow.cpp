@@ -39,6 +39,7 @@ void MainWindow::resizeEvent(QResizeEvent* evt)
 void MainWindow::on_buttonNewGame_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+    fillSpinBoxes();
 }
 
 void MainWindow::on_buttonRules_clicked()
@@ -63,10 +64,16 @@ void MainWindow::on_buttonExit_clicked()
 
 
 
-
-
-
 /*  optionGamePage   */
+
+void MainWindow::fillSpinBoxes()
+{
+    ui->spinBoxWidth->setRange(MIN_WIDTH, MAX_WIDTH);
+    ui->spinBoxWidth->setValue(DEFAULT_WIDTH);
+    ui->spinBoxHeight->setRange(MIN_LENGTH, MAX_LENGTH);
+    ui->spinBoxHeight->setValue(DEFAULT_LENGTH);
+}
+
 
 void MainWindow::on_buttonBackToMenu_clicked()
 {
@@ -85,6 +92,46 @@ void MainWindow::on_buttonBackToMenuFromRules_clicked()
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
+void MainWindow::on_buttonStartGame_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->gamePage);
+    preparingToPlay();
+}
 
 
 
+void MainWindow::preparingToPlay() {
+
+    // generowanie tabeli na podstawie ustalonych wartości
+    int width = ui->spinBoxWidth->value();
+    int height = ui->spinBoxHeight->value();
+    QString tmp = QString::number(height);
+    QString tmp2 = QString::number(width);
+
+    ui->heightGame->setText(QString(tmp));
+    ui->widthGame->setText(QString(tmp2));
+
+
+    ui->table1->setRowCount(width);
+    ui->table1->setColumnCount(height);
+
+    ui->table2->setRowCount(width);
+    ui->table2->setColumnCount(height);
+
+//    for(int r=0; r<height; r++)
+//    {
+//        for(int c=0; c<width; c++)
+//        {
+//            QModelIndex index = ui->table1->model()->index(r,c, QModelIndex());
+//            index.data()=2;
+//            // Do something with the QVariant that index.data() returns
+//            //qDebug() << r << c << index.data().toString();
+//        }
+//    }
+
+//    game_ = startGame(this, width, length);
+//    game_->controller->initialStateOfBoard();
+//    placeShips(*(game_->controller), *(game_->desk), 1);
+//    placeShips(*(game_->controller), *(game_->desk), 2);
+//    prepareGameBoards();
+}

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "constant.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,12 +35,19 @@ private slots:
     // --- optionGamePage ---
 
     void on_buttonBackToMenu_clicked();
+    void fillSpinBoxes();
 
 
     // --- rulesPage ---
 
     void on_buttonBackToMenuFromRules_clicked();
 
+    void on_buttonStartGame_clicked();
+
+
+    // --- before game ---
+
+    void preparingToPlay();
 
 
 private:
