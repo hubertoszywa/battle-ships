@@ -8,8 +8,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QPixmap pix("C:/Users/huber/OneDrive/Pulpit/battle-ships/battle-ships/assets/main-photo.png");
-    ui->label_pic->setPixmap(pix.scaled(800,600,Qt::KeepAspectRatio));
+    //QPixmap pix("C:/Users/huber/OneDrive/Pulpit/battle-ships/battle-ships/assets/main-photo.png");
+    //ui->label_pic->setPixmap(pix.scaled(800,600,Qt::KeepAspectRatio));
+
+//    QPixmap bkgnd(":/resources/assets/img/main-photo.png");
+//    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+//    QPalette palette;
+//    palette.setBrush(QPalette::Background, bkgnd);
+//    this->setPalette(palette);
+
+    ui->statusbar->showMessage("Battle Ships v1.1.4", 5000);
 }
 
 MainWindow::~MainWindow()
