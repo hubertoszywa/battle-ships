@@ -10,19 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
-    newgame.cpp \
-    rules.cpp
+    mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h \
-    newgame.h \
-    rules.h
+    mainwindow.h
 
 FORMS += \
-    mainwindow.ui \
-    newgame.ui \
-    rules.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

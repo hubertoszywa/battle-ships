@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "rules.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,14 +15,35 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_pushButton_2_clicked();
+protected:
+    void resizeEvent(QResizeEvent* evt) override;
 
-    void on_pushButton_4_clicked();
+private slots:
+
+    // --- mainPage ---
+
+    void on_buttonNewGame_clicked();
+
+    void on_buttonRules_clicked();
+
+    void on_buttonAuthors_clicked();
+
+    void on_buttonExit_clicked();
+
+
+    // --- optionGamePage ---
+
+    void on_buttonBackToMenu_clicked();
+
+
+    // --- rulesPage ---
+
+    void on_buttonBackToMenuFromRules_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;
-    Rules *rules;
 };
 
 #endif // MAINWINDOW_H
