@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "constant.h"
+#include "board.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -48,6 +49,7 @@ private slots:
     // --- before game ---
 
     void preparingToPlay();
+    void makeWater(int width, int height);
 
 
 private:

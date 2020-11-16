@@ -537,10 +537,10 @@
          <enum>Qt::DotLine</enum>
         </property>
         <property name="rowCount">
-         <number>0</number>
+         <number>8</number>
         </property>
         <property name="columnCount">
-         <number>0</number>
+         <number>8</number>
         </property>
         <attribute name="horizontalHeaderMinimumSectionSize">
          <number>15</number>
@@ -554,6 +554,22 @@
         <attribute name="verticalHeaderDefaultSectionSize">
          <number>25</number>
         </attribute>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
        </widget>
        <widget class="QTableWidget" name="table1">
         <property name="geometry">

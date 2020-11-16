@@ -3,9 +3,7 @@
 #include <QPixmap>
 #include <QMessageBox>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -14,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    ui->label_pic->setPixmap(pix.scaled(800,600,Qt::KeepAspectRatio));
 
     ui->statusbar2->showMessage("Battle Ships v1.1.4", 5000);
+
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +31,7 @@ void MainWindow::resizeEvent(QResizeEvent* evt)
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+    Board game;
     QMainWindow::resizeEvent(evt); // call inherited implementation
 }
 
@@ -100,23 +100,42 @@ void MainWindow::on_buttonStartGame_clicked()
 
 
 
-void MainWindow::preparingToPlay() {
 
+void MainWindow::makeWater(int width, int height)
+{
+    int water = 0;
+    for(int i=0; i < width; i++)
+    {
+        for(int j=0; j < height; j++)
+        {
+            QTableWidgetItem *pCell = ui->table1->item(i, j);
+            pCell = new QTableWidgetItem;
+            ui->table1->setItem(i, j, pCell);
+            pCell->setText(QString::number(water));
+        }
+    }
+}
+
+void MainWindow::preparingToPlay() {
+    Board game;
     // generowanie tabeli na podstawie ustalonych wartości
-    int width = ui->spinBoxWidth->value();
-    int height = ui->spinBoxHeight->value();
-    QString tmp = QString::number(height);
-    QString tmp2 = QString::number(width);
+    game.boardWidth = ui->spinBoxWidth->value();
+    game.boardHeight = ui->spinBoxHeight->value();
+    QString tmp = QString::number(game.boardHeight);
+    QString tmp2 = QString::number(game.boardWidth);
 
     ui->heightGame->setText(QString(tmp));
     ui->widthGame->setText(QString(tmp2));
 
 
-    ui->table1->setRowCount(width);
-    ui->table1->setColumnCount(height);
+    ui->table1->setRowCount(game.boardWidth);
+    ui->table1->setColumnCount(game.boardHeight);
 
-    ui->table2->setRowCount(width);
-    ui->table2->setColumnCount(height);
+
+    ui->table2->setRowCount(game.boardWidth);
+    ui->table2->setColumnCount(game.boardHeight);
+
+    makeWater(game.boardWidth, game.boardHeight);
 
 //    for(int r=0; r<height; r++)
 //    {
