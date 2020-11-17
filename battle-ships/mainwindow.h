@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStandardItemModel>
+#include <QHeaderView>
 #include "constant.h"
 #include "board.h"
 
@@ -16,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 
 protected:
     void resizeEvent(QResizeEvent* evt) override;
@@ -50,10 +53,13 @@ private slots:
 
     void preparingToPlay();
     void makeWater(int width, int height);
+    void addShipsToBoard(int width, int height);
+    bool addShip(int width, int height, int shipLength);
 
 
 private:
     Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

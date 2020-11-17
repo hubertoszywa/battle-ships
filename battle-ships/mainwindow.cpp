@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QPixmap>
 #include <QMessageBox>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -12,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 //    ui->label_pic->setPixmap(pix.scaled(800,600,Qt::KeepAspectRatio));
 
     ui->statusbar2->showMessage("Battle Ships v1.1.4", 5000);
-
 }
 
 MainWindow::~MainWindow()
@@ -101,56 +101,77 @@ void MainWindow::on_buttonStartGame_clicked()
 
 
 
+
+/*  before game  */
+
+
 void MainWindow::makeWater(int width, int height)
 {
-    int water = 0;
     for(int i=0; i < width; i++)
-    {
         for(int j=0; j < height; j++)
-        {
-            QTableWidgetItem *pCell = ui->table1->item(i, j);
-            pCell = new QTableWidgetItem;
-            ui->table1->setItem(i, j, pCell);
-            pCell->setText(QString::number(water));
-        }
+           ui->table1->setItem(i,j,new QTableWidgetItem(QString::number(0)));
+}
+
+
+void MainWindow::addShipsToBoard(int width, int height)
+{
+    for(int i=0; i<numberOfShips; ++i)
+    {
+        while(!addShip(width, height, ships[i]));
     }
 }
 
+
+bool MainWindow::addShip(int width, int height, int shipLength)
+{
+    //losowanie kierunku, w którą ma być układany statek
+    bool direction = rand()%2; //0 = poziomo, 1 = pionowo
+
+    //losowanie współrzędnych pola, od którego ma zacząć się dodawanie statku
+    //z jednoczesnym ograniczeniem planszy (tak, żeby statek nie wyszedł "po za"
+    int x = rand()%(direction ? width : (1+width-shipLength));
+    int y = rand()%(direction ? (1+height-shipLength) : height);
+
+    //sprawdzanie czy pola które ma zająć statek są dozwolone (czyli czy nie są 1 lub 2)
+    for(int i = 0; i<shipLength; ++i)
+    {
+        int val;
+        QTableWidgetItem *a = ui->table1->item(x+(direction ? 0 : i), y+(direction ? i : 0));
+        val = a->text().toInt();
+        if(val > 0)
+            return false;
+    }
+
+    for(int i = 0; i<shipLength; ++i)
+    {
+        ui->table1->setItem(x+(direction ? 0 : i), y+(direction ? i : 0), new QTableWidgetItem(QString::number(666)));
+    }
+    //TESTOWO dodanie pola
+    //ui->table1->setItem(x,y,new QTableWidgetItem(QString::number(1)));
+
+    return true;
+
+}
+
+
+
 void MainWindow::preparingToPlay() {
-    Board game;
     // generowanie tabeli na podstawie ustalonych wartości
-    game.boardWidth = ui->spinBoxWidth->value();
-    game.boardHeight = ui->spinBoxHeight->value();
-    QString tmp = QString::number(game.boardHeight);
-    QString tmp2 = QString::number(game.boardWidth);
+    int width = ui->spinBoxWidth->value();
+    int height = ui->spinBoxHeight->value();
 
-    ui->heightGame->setText(QString(tmp));
-    ui->widthGame->setText(QString(tmp2));
+    ui->table1->setRowCount(width);
+    ui->table1->setColumnCount(height);
 
 
-    ui->table1->setRowCount(game.boardWidth);
-    ui->table1->setColumnCount(game.boardHeight);
+    QHeaderView *headerView = ui->table1->horizontalHeader();
+    headerView->setSectionResizeMode(QHeaderView::Stretch);
+    headerView = ui->table1->verticalHeader();
+    headerView->setSectionResizeMode(QHeaderView::Stretch);
 
 
-    ui->table2->setRowCount(game.boardWidth);
-    ui->table2->setColumnCount(game.boardHeight);
 
-    makeWater(game.boardWidth, game.boardHeight);
+    makeWater(width, height);
+    addShipsToBoard(width, height);
 
-//    for(int r=0; r<height; r++)
-//    {
-//        for(int c=0; c<width; c++)
-//        {
-//            QModelIndex index = ui->table1->model()->index(r,c, QModelIndex());
-//            index.data()=2;
-//            // Do something with the QVariant that index.data() returns
-//            //qDebug() << r << c << index.data().toString();
-//        }
-//    }
-
-//    game_ = startGame(this, width, length);
-//    game_->controller->initialStateOfBoard();
-//    placeShips(*(game_->controller), *(game_->desk), 1);
-//    placeShips(*(game_->controller), *(game_->desk), 2);
-//    prepareGameBoards();
 }
