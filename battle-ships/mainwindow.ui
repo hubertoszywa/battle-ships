@@ -558,7 +558,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QTableView" name="table2">
+         <widget class="QTableWidget" name="table2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -586,6 +586,18 @@
           <property name="verticalScrollMode">
            <enum>QAbstractItemView::ScrollPerItem</enum>
           </property>
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>15</number>
+          </attribute>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>25</number>
+          </attribute>
+          <attribute name="verticalHeaderMinimumSectionSize">
+           <number>15</number>
+          </attribute>
+          <attribute name="verticalHeaderDefaultSectionSize">
+           <number>25</number>
+          </attribute>
          </widget>
         </item>
        </layout>

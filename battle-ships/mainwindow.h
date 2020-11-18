@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QStandardItemModel>
 #include <QHeaderView>
+#include <QTableWidget>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include "constant.h"
 #include "board.h"
 
@@ -53,8 +57,9 @@ private slots:
 
     void preparingToPlay();
     void makeWater(int width, int height);
-    void addShipsToBoard(int width, int height);
-    bool addShip(int width, int height, int shipLength);
+    void addShipsToBoard(int width, int height, QTableWidget *myTable);
+    bool addShip(int width, int height, int shipLength, QTableWidget *myTable);
+
 
 
 private:

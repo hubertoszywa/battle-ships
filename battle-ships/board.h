@@ -4,7 +4,6 @@
 #include <QApplication>
 #include "constant.h"
 #include "mainwindow.h"
-#include <cstdlib>
 
 
 
