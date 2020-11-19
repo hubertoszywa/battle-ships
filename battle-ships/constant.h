@@ -29,10 +29,10 @@ const int DEFAULT_LENGTH = 15;
 /** Liczba statków do rozmieszczenia na planszy
     UWAGA! Przy zmianie wartości dodaj rodzaje statków
 */
-const int numberOfShips = 6;
+const int numberOfShips = 9;
 
 /** Rodzaje statków - Ilu masztowe?*/
-const int ships[numberOfShips] = {5, 4, 3, 3, 2, 2};
+const int ships[numberOfShips] = {5, 4, 3, 3, 2, 2, 1, 1, 1};
 
 
 #endif // CONSTANT_H

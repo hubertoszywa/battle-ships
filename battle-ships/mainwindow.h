@@ -56,10 +56,6 @@ private slots:
     // --- before game ---
 
     void preparingToPlay();
-    void makeWater(int width, int height);
-    void addShipsToBoard(int width, int height, QTableWidget *myTable);
-    bool addShip(int width, int height, int shipLength, QTableWidget *myTable);
-
 
 
 private:

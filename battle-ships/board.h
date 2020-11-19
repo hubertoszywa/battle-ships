@@ -4,20 +4,27 @@
 #include <QApplication>
 #include "constant.h"
 #include "mainwindow.h"
+#include <QDebug>
 
 
-
-
-class Board
+class Board : public QTableWidget
 {
+private:
+    int boardWidth;
+    int boardHeight;
+    QTableWidget *myTable;
+
+    void makeWater();
+    bool addShip(int shipLength);
 
 public:
-    Board();
-    ~Board();
-    int boardHeight;
-    int boardWidth;
+    Board(int, int, QTableWidget *);
+
+    void createBoard();
     void addShipsToBoard();
-    bool addShip(int shipLength);
+
+
+    ~Board();
 
 };
 
