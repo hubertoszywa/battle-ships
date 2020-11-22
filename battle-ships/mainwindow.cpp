@@ -113,3 +113,9 @@ void MainWindow::preparingToPlay() {
     myBoard1.addShipsToBoard();
     myBoard2.addShipsToBoard();
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+    fillSpinBoxes();
+}
