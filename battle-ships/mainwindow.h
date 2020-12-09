@@ -43,6 +43,7 @@ private slots:
     // --- optionGamePage ---
 
     void on_buttonBackToMenu_clicked();
+
     void fillSpinBoxes();
 
 
@@ -57,8 +58,15 @@ private slots:
 
     void preparingToPlay();
 
-
     void on_pushButton_clicked();
+
+
+    //void onItemClicked( QTableWidgetItem * pItem );
+
+
+    // --- game ---
+    void theGame( QTableWidgetItem *pItem );
+
 
 private:
     Ui::MainWindow *ui;

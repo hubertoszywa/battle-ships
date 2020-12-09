@@ -2,8 +2,10 @@
 #define BOARD_H
 
 #include <QApplication>
+#include <QObject>
 #include "constant.h"
 #include "mainwindow.h"
+#include "game.h"
 #include <QDebug>
 
 
@@ -23,9 +25,7 @@ public:
     void createBoard();
     void addShipsToBoard();
 
-
     ~Board();
-
 };
 
 #endif // BOARD_H

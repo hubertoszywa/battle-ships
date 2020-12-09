@@ -42,7 +42,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="mainPage">
        <widget class="QWidget" name="layoutWidget">
@@ -507,20 +507,6 @@
         </font>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_2">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Statki przeciwnika</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="1">
          <widget class="QTableWidget" name="table1">
           <property name="sizeIncrement">
@@ -528,6 +514,18 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="cursor" stdset="0">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::SelectedClicked</set>
+          </property>
+          <property name="cornerButtonEnabled">
+           <bool>false</bool>
           </property>
           <attribute name="horizontalHeaderMinimumSectionSize">
            <number>15</number>
@@ -541,20 +539,6 @@
           <attribute name="verticalHeaderDefaultSectionSize">
            <number>25</number>
           </attribute>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Twoje statki</string>
-          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -600,7 +584,57 @@
           </attribute>
          </widget>
         </item>
-        <item row="3" column="0" colspan="2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Twoje statki</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Statki przeciwnika</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="info_label">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">info_label{
+	color: white;
+}</string>
+          </property>
+          <property name="text">
+           <string>NIE!!!</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="3">
          <widget class="QPushButton" name="pushButton">
           <property name="minimumSize">
            <size>

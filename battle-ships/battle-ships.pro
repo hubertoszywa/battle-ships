@@ -10,13 +10,17 @@ CONFIG += c++11
 
 SOURCES += \
     board.cpp \
+    game.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ships.cpp
 
 HEADERS += \
     board.h \
     constant.h \
-    mainwindow.h
+    game.h \
+    mainwindow.h \
+    ships.h
 
 FORMS += \
     mainwindow.ui

@@ -1,19 +1,28 @@
 #include "mainwindow.h"
+#include "board.h"
+#include "game.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
 #include <QMessageBox>
 #include <QDebug>
 
+
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->statusbar2->showMessage("Battle Ships v1.1.4", 5000);
+    connect( ui->table1, &Board::itemClicked, this, &MainWindow::theGame );
 }
+
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
 
 /* Wyświetlanie i dopasowanie obrazka w tle */
 void MainWindow::resizeEvent(QResizeEvent* evt)
@@ -90,6 +99,7 @@ void MainWindow::on_buttonStartGame_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->gamePage);
     preparingToPlay();
+
 }
 
 
@@ -114,8 +124,28 @@ void MainWindow::preparingToPlay() {
     myBoard2.addShipsToBoard();
 }
 
+
+
+
+
 void MainWindow::on_pushButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
     fillSpinBoxes();
 }
+
+
+
+
+
+/* the game */
+
+
+void MainWindow::theGame( QTableWidgetItem *pItem )
+{
+    Game a(ui->table1, ui->spinBoxWidth->value(), ui->spinBoxHeight->value());
+    a.showMyItem(pItem);
+
+
+}
+

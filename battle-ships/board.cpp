@@ -1,21 +1,28 @@
 #include "board.h"
 
+
 Board::Board(int x, int y, QTableWidget *z)
-{
+{   
     boardWidth = x;
     boardHeight = y;
     myTable = z;
 }
 
+
+
 void Board::createBoard()
 {
     myTable->setRowCount(boardWidth);
     myTable->setColumnCount(boardHeight);
+    myTable->setFocusPolicy(Qt::NoFocus);
+    myTable->setSelectionMode(QAbstractItemView::NoSelection);
+    myTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QHeaderView *headerView = myTable->horizontalHeader();
     headerView->setSectionResizeMode(QHeaderView::Stretch);
     headerView = myTable->verticalHeader();
     headerView->setSectionResizeMode(QHeaderView::Stretch);
+
 
     makeWater();
 }
@@ -30,7 +37,10 @@ void Board::makeWater()
 void Board::addShipsToBoard()
 {
     for(int i=0; i < numberOfShips; ++i)
+    {
         while(!addShip(ships[i]));
+
+    }
 }
 
 
@@ -61,7 +71,7 @@ bool Board::addShip(int shipLength)
 
     for(int i = 0; i<shipLength; i++)
     {
-        myTable->setItem((direction ? x : x+i), (direction ? y+i : y), new QTableWidgetItem(QString::number(2)));
+        myTable->setItem((direction ? x : x+i), (direction ? y+i : y), new QTableWidgetItem(QString::number(shipLength)));
         myTable->item((direction ? x : x+i), (direction ? y+i : y))->setBackground(Qt::red);
 
         for(int k = (direction ? x-1 : x+i-1); k <= (direction ? x+1 : x+i+1); k++)
@@ -75,13 +85,14 @@ bool Board::addShip(int shipLength)
 
                 b = myTable->item(k, l);
                 ship = b->text().toInt();
-                if(ship != 2 && ship != 1)
-                    myTable->setItem(k, l, new QTableWidgetItem(QString::number(1)));
+                if(ship != shipLength && ship != 9)
+                    myTable->setItem(k, l, new QTableWidgetItem(QString::number(9)));
             }
         }
     }
     return true;
 }
+
 
 Board::~Board()
 {
