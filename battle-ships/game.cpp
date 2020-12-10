@@ -9,6 +9,7 @@ Game::Game(QTableWidget *z, int width, int height){
 
 void Game::showMyItem(QTableWidgetItem *pItem)
 {
+
     int x = pItem->row();
     int y = pItem->column();
 
@@ -16,18 +17,19 @@ void Game::showMyItem(QTableWidgetItem *pItem)
     QTableWidgetItem *a = myBoard->item(x, y);
     QTableWidgetItem *b;
     val = a->text().toInt();
+
     if(val == 1)
     {
         myBoard->setItem(x, y, new QTableWidgetItem(QString::number(100)));
         myBoard->item(x,y)->setBackground(Qt::green);
     }
 
-    else if (val == 9 || val == 0)
+    else if (val == -1 || val == 0)
     {
         myBoard->item(x,y)->setBackground(Qt::gray);
     }
 
-    else
+    else if (val < 10 && val > 1)
     {
         QVector<Point>hitted;
         Point temp;
@@ -48,12 +50,12 @@ void Game::showMyItem(QTableWidgetItem *pItem)
                 //pobranie zawartości komórki po prawej stronie
                 b = myBoard->item(x, y+i);
                 whatIn = b->text().toInt();
-                if(whatIn == 9)
+                if(whatIn == 0)
                     break;
                 if(whatIn == val*10)
                 {
                     temp.row = x;
-                    temp.col = y;
+                    temp.col = y+i;
                     hitted.push_back(temp);
                 }
             }
@@ -68,12 +70,12 @@ void Game::showMyItem(QTableWidgetItem *pItem)
                 //pobranie zawartości komórki po prawej stronie
                 b = myBoard->item(x, y-i);
                 whatIn = b->text().toInt();
-                if(whatIn == 9)
+                if(whatIn == 0)
                     break;
                 if(whatIn == val*10)
                 {
                     temp.row = x;
-                    temp.col = y;
+                    temp.col = y-i;
                     hitted.push_back(temp);
                 }
             }
@@ -86,13 +88,13 @@ void Game::showMyItem(QTableWidgetItem *pItem)
             if(x+i <= boardWidth-1)
             {
                 //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x+1,y);
+                b = myBoard->item(x+i,y);
                 whatIn = b->text().toInt();
-                if(whatIn == 9)
+                if(whatIn == 0)
                     break;
                 if(whatIn == val*10)
                 {
-                    temp.row = x;
+                    temp.row = x+i;
                     temp.col = y;
                     hitted.push_back(temp);
                 }
@@ -106,13 +108,13 @@ void Game::showMyItem(QTableWidgetItem *pItem)
             if(x-i >= 0)
             {
                 //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x-1, y);
+                b = myBoard->item(x-i, y);
                 whatIn = b->text().toInt();
-                if(whatIn == 9)
+                if(whatIn == 0)
                     break;
                 if(whatIn == val*10)
                 {
-                    temp.row = x;
+                    temp.row = x-i;
                     temp.col = y;
                     hitted.push_back(temp);
                 }
@@ -123,17 +125,24 @@ void Game::showMyItem(QTableWidgetItem *pItem)
             //qDebug() << "XXX = " <<x <<" YYY = " <<y;
 
         //jeśli trafionych pól jest tyle ilu masztowy jest statek, wówczas zaznacz jako trafiony-zatopiony
-        if(hitted.size() == val-1)
+        if(hitted.size() == val)
         {
             for(int i=0; i < hitted.size(); ++i)
             {
                 temp = hitted[i];
-                myBoard->setItem(temp.row, temp.col, new QTableWidgetItem(QString::number(val*10)));
+                myBoard->setItem(temp.row, temp.col, new QTableWidgetItem(QString::number(val*100)));
                 myBoard->item(temp.row,temp.col)->setBackground(Qt::green);
+                myBoard->item(temp.row,temp.col)->setFlags(Qt::ItemIsEditable);
+                //myBoard->item(temp.row,temp.col)->flags() & !Qt::ItemIsEditable
             }
         }
 
         hitted.clear();
+    }
+
+    else
+    {
+        return;
     }
 
         //qDebug() << "XXX = " <<x <<" YYY = " <<y;

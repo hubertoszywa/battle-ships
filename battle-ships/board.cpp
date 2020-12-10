@@ -31,7 +31,7 @@ void Board::makeWater()
 {
     for(int i=0; i < boardWidth; i++)
         for(int j=0; j < boardHeight; j++)
-            myTable->setItem(i,j,new QTableWidgetItem(QString::number(0)));
+            myTable->setItem(i,j,new QTableWidgetItem(QString::number(-1)));
 }
 
 void Board::addShipsToBoard()
@@ -61,7 +61,7 @@ bool Board::addShip(int shipLength)
         int val;
         QTableWidgetItem *a = myTable->item(x+(direction ? 0 : i), y+(direction ? i : 0));
         val = a->text().toInt();
-        if(val > 0)
+        if(val >= 0)
             return false;
     }
 
@@ -85,8 +85,8 @@ bool Board::addShip(int shipLength)
 
                 b = myTable->item(k, l);
                 ship = b->text().toInt();
-                if(ship != shipLength && ship != 9)
-                    myTable->setItem(k, l, new QTableWidgetItem(QString::number(9)));
+                if(ship != shipLength && ship != 0)
+                    myTable->setItem(k, l, new QTableWidgetItem(QString::number(0)));
             }
         }
     }
