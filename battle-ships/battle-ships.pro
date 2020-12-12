@@ -13,6 +13,7 @@ SOURCES += \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
+    player.cpp \
     ships.cpp
 
 HEADERS += \
@@ -20,6 +21,7 @@ HEADERS += \
     constant.h \
     game.h \
     mainwindow.h \
+    player.h \
     ships.h
 
 FORMS += \

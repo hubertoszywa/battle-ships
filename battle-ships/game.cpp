@@ -1,156 +1,171 @@
 #include "game.h"
 
-Game::Game(QTableWidget *z, int width, int height){
+Game::Game(QTableWidget *z, QTableWidgetItem *pItem){
     myBoard = z;
-    boardHeight = height;
-    boardWidth = width;
+    boardHeight = myBoard->rowCount();
+    boardWidth = myBoard->columnCount();
+    itemX = pItem->row();
+    itemY = pItem->column();
+
+    QTableWidgetItem *a = myBoard->item(itemX, itemY);
+    itemVal = a->text().toInt();
 }
 
 
-void Game::showMyItem(QTableWidgetItem *pItem)
+void Game::gameCheckFields()
 {
-
-    int x = pItem->row();
-    int y = pItem->column();
-
-    int val, whatIn;
-    QTableWidgetItem *a = myBoard->item(x, y);
     QTableWidgetItem *b;
-    val = a->text().toInt();
+    int whatIn;
 
-    if(val == 1)
+    //sprawdzanie zatopionych masztów na prawo od trafionego masztu
+    for(int i=1; i < itemVal; ++i)
     {
-        myBoard->setItem(x, y, new QTableWidgetItem(QString::number(100)));
-        myBoard->item(x,y)->setBackground(Qt::green);
+        if(itemY+i <= boardHeight-1)
+        {
+            //pobranie zawartości komórki po prawej stronie
+            b = myBoard->item(itemX, itemY+i);
+            whatIn = b->text().toInt();
+            if(whatIn == 0)
+                break;
+            if(whatIn == itemVal*10)
+            {
+                hittedCoordinates.row = itemX;
+                hittedCoordinates.col = itemY+i;
+                hitted.push_back(hittedCoordinates);
+            }
+        }
     }
 
-    else if (val == -1 || val == 0)
+
+    //sprawdzanie zatopionych masztów na lewo od trafionego masztu
+    for(int i=1; i < itemVal; ++i)
     {
-        myBoard->item(x,y)->setBackground(Qt::gray);
+        if(itemY-i >= 0)
+        {
+            //pobranie zawartości komórki po prawej stronie
+            b = myBoard->item(itemX, itemY-i);
+            whatIn = b->text().toInt();
+            if(whatIn == 0)
+                break;
+            if(whatIn == itemVal*10)
+            {
+                hittedCoordinates.row = itemX;
+                hittedCoordinates.col = itemY-i;
+                hitted.push_back(hittedCoordinates);
+            }
+        }
     }
 
-    else if (val < 10 && val > 1)
+
+    //sprawdzanie zatopionych masztów w dół od trafionego masztu
+    for(int i=1; i < itemVal; ++i)
     {
-        QVector<Point>hitted;
+        if(itemX+i <= boardWidth-1)
+        {
+            //pobranie zawartości komórki po prawej stronie
+            b = myBoard->item(itemX+i,itemY);
+            whatIn = b->text().toInt();
+            if(whatIn == 0)
+                break;
+            if(whatIn == itemVal*10)
+            {
+                hittedCoordinates.row = itemX+i;
+                hittedCoordinates.col = itemY;
+                hitted.push_back(hittedCoordinates);
+            }
+        }
+    }
+
+
+    //sprawdzanie zatopionych masztów w górę od trafionego masztu
+    for(int i=1; i < itemVal; ++i)
+    {
+        if(itemX-i >= 0)
+        {
+            //pobranie zawartości komórki po prawej stronie
+            b = myBoard->item(itemX-i, itemY);
+            whatIn = b->text().toInt();
+            if(whatIn == 0)
+                break;
+            if(whatIn == itemVal*10)
+            {
+                hittedCoordinates.row = itemX-i;
+                hittedCoordinates.col = itemY;
+                hitted.push_back(hittedCoordinates);
+            }
+        }
+    }
+}
+
+
+
+
+
+int Game::gameMove(Player *player)
+{
+    if(itemVal == 1)
+    {
+        myBoard->setItem(itemX, itemY, new QTableWidgetItem(QString::number(100)));
+        myBoard->item(itemX,itemY)->setBackground(Qt::green);
+        myBoard->item(itemX,itemY)->setFlags(Qt::ItemIsEditable);
+        player->playerShot(10);
+        return 10;
+    }
+
+    else if (itemVal == -1 || itemVal == 0)
+    {
+        myBoard->setItem(itemX, itemY, new QTableWidgetItem(QString::number(1000)));
+        myBoard->item(itemX,itemY)->setBackground(Qt::gray);
+        player->playerShot(0);
+        return 0;
+    }
+
+    else if (itemVal < 10 && itemVal > 1)
+    {
         Point temp;
 
-        myBoard->setItem(x, y, new QTableWidgetItem(QString::number(val*10)));
-        myBoard->item(x,y)->setBackground(Qt::yellow);
+        myBoard->setItem(itemX,itemY, new QTableWidgetItem(QString::number(itemVal*10)));
+        myBoard->item(itemX,itemY)->setBackground(Qt::yellow);
 
-        temp.row = x;
-        temp.col = y;
-        hitted.push_back(temp);
+        hittedCoordinates.row = itemX;
+        hittedCoordinates.col = itemY;
+        hitted.push_back(hittedCoordinates);
 
+        gameCheckFields();
 
-        //sprawdzanie na prawo od trafionego masztu
-        for(int i=1; i < val; ++i)
+        //jeśli trafionych pól jest tyle, ilu masztowy jest statek...
+        if(hitted.size() == itemVal)
         {
-            if(y+i <= boardHeight-1)
-            {
-                //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x, y+i);
-                whatIn = b->text().toInt();
-                if(whatIn == 0)
-                    break;
-                if(whatIn == val*10)
-                {
-                    temp.row = x;
-                    temp.col = y+i;
-                    hitted.push_back(temp);
-                }
-            }
-        }
-
-
-        //sprawdzanie na lewo od trafionego masztu
-        for(int i=1; i < val; ++i)
-        {
-            if(y-i >= 0)
-            {
-                //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x, y-i);
-                whatIn = b->text().toInt();
-                if(whatIn == 0)
-                    break;
-                if(whatIn == val*10)
-                {
-                    temp.row = x;
-                    temp.col = y-i;
-                    hitted.push_back(temp);
-                }
-            }
-        }
-
-
-        //sprawdzanie w dół od trafionego masztu
-        for(int i=1; i < val; ++i)
-        {
-            if(x+i <= boardWidth-1)
-            {
-                //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x+i,y);
-                whatIn = b->text().toInt();
-                if(whatIn == 0)
-                    break;
-                if(whatIn == val*10)
-                {
-                    temp.row = x+i;
-                    temp.col = y;
-                    hitted.push_back(temp);
-                }
-            }
-        }
-
-
-        //sprawdzanie w górę od trafionego masztu
-        for(int i=1; i < val; ++i)
-        {
-            if(x-i >= 0)
-            {
-                //pobranie zawartości komórki po prawej stronie
-                b = myBoard->item(x-i, y);
-                whatIn = b->text().toInt();
-                if(whatIn == 0)
-                    break;
-                if(whatIn == val*10)
-                {
-                    temp.row = x-i;
-                    temp.col = y;
-                    hitted.push_back(temp);
-                }
-            }
-        }
-
-
-            //qDebug() << "XXX = " <<x <<" YYY = " <<y;
-
-        //jeśli trafionych pól jest tyle ilu masztowy jest statek, wówczas zaznacz jako trafiony-zatopiony
-        if(hitted.size() == val)
-        {
+            //...wówczas zaznacz jako trafiony-zatopiony
             for(int i=0; i < hitted.size(); ++i)
             {
                 temp = hitted[i];
-                myBoard->setItem(temp.row, temp.col, new QTableWidgetItem(QString::number(val*100)));
+                myBoard->setItem(temp.row, temp.col, new QTableWidgetItem(QString::number(itemVal*100)));
                 myBoard->item(temp.row,temp.col)->setBackground(Qt::green);
                 myBoard->item(temp.row,temp.col)->setFlags(Qt::ItemIsEditable);
-                //myBoard->item(temp.row,temp.col)->flags() & !Qt::ItemIsEditable
             }
+            player->playerShot(10);
+            return 10;
         }
-
-        hitted.clear();
+        player->playerShot(1);
+        return 1;
     }
-
     else
     {
-        return;
+       qDebug() << "Już tu strzelałeś! Spróbuj ponownie!";
+       return -1;
     }
+}
 
-        //qDebug() << "XXX = " <<x <<" YYY = " <<y;
+
+void Game::botMove()
+{
+
 }
 
 
 
 Game::~Game()
 {
-
+    hitted.clear();
 }

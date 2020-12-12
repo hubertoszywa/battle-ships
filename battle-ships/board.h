@@ -15,7 +15,6 @@ private:
     int boardWidth;
     int boardHeight;
     QTableWidget *myTable;
-    int eluwina;
 
     void makeWater();
     bool addShip(int shipLength);

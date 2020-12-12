@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <board.h>
 #include "ships.h"
+#include "player.h"
 
 class Game : public QObject
 {
@@ -14,16 +15,20 @@ class Game : public QObject
 
 private:
     QTableWidget *myBoard;
-    int boardWidth;
-    int boardHeight;
+    int boardWidth, boardHeight;
+    int itemVal, itemX, itemY;
+    QVector<Point>hitted;
+    Point hittedCoordinates;
+
 
 public:
-    Game(QTableWidget *, int, int);
-    //explicit Game(QObject *parent = nullptr);
-    void showMyItem(QTableWidgetItem *pItem);
+    Game(QTableWidget *z, QTableWidgetItem *pItem);
+    int gameMove(Player *player);
+    void gameCheckFields();
+    void userMove();
+    void botMove();
 
     ~Game();
-
 
 
 signals:

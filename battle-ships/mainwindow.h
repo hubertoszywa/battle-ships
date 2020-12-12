@@ -10,6 +10,9 @@
 #include <ctime>
 #include "constant.h"
 #include "board.h"
+#include "player.h"
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -70,6 +73,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Player user;
+    Player bot;
 
 };
 

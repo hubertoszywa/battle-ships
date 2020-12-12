@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "board.h"
 #include "game.h"
+#include "player.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
 #include <QMessageBox>
@@ -67,6 +68,9 @@ void MainWindow::on_buttonExit_clicked()
 
 
 
+
+
+
 /*  optionGamePage   */
 
 void MainWindow::fillSpinBoxes()
@@ -102,32 +106,6 @@ void MainWindow::on_buttonStartGame_clicked()
 
 }
 
-
-
-
-
-/*  before game  */
-
-void MainWindow::preparingToPlay() {
-    srand(time(NULL));
-    // pobranie wartości z ustaloną szerokością i wysokością
-    int width = ui->spinBoxWidth->value();
-    int height = ui->spinBoxHeight->value();
-
-    Board myBoard1(width, height, ui->table1);
-    Board myBoard2(width, height, ui->table2);
-
-    myBoard1.createBoard();
-    myBoard2.createBoard();
-
-    myBoard1.addShipsToBoard();
-    myBoard2.addShipsToBoard();
-}
-
-
-
-
-
 void MainWindow::on_pushButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
@@ -137,15 +115,88 @@ void MainWindow::on_pushButton_clicked()
 
 
 
+/*  before game  */
+
+void MainWindow::preparingToPlay() {
+    srand(time(NULL));
+
+    // pobranie wartości z ustaloną szerokością i wysokością
+    int width = ui->spinBoxWidth->value();
+    int height = ui->spinBoxHeight->value();
+
+    //przygotowanie tablicy statystyk dla użytkownika
+    ui->lcdNumber_1->display(0);
+    ui->lcdNumber_2->display(0);
+    ui->lcdNumber_3->display(0);
+    ui->lcdNumber_4->display(0);
+    user.playerStart();
+
+
+    //przygotowanie tablicy statystyk dla bota
+    ui->lcdNumber_5->display(0);
+    ui->lcdNumber_6->display(0);
+    ui->lcdNumber_7->display(0);
+    ui->lcdNumber_8->display(0);
+    bot.playerStart();
+
+
+    // wygenerowanie tablicy dla gracza i bota
+    Board myBoard1(width, height, ui->table1);
+    Board myBoard2(width, height, ui->table2);
+    myBoard1.createBoard();
+    myBoard2.createBoard();
+
+    // wygenerowanie i rozmieszczenie statków na planszy
+    myBoard1.addShipsToBoard();
+    myBoard2.addShipsToBoard();
+
+
+    // wylosowanie gracza do pierwszego ruchu (bot czy user)
+    int random = rand()%2;
+    if(random == 1)
+        qDebug() << "Rozpoczyna gracz";
+    else
+    {
+        qDebug() << "Rozpoczyna bot";
+        QTableWidgetItem *botShot;
+        botShot = ui->table2->item(rand()%width+0, rand()%height+0 );
+        Game move(ui->table2, botShot);
+        move.gameMove(&bot);
+        ui->lcdNumber_5->display(bot.numberOfShots);
+        ui->lcdNumber_6->display(bot.hitShots);
+        ui->lcdNumber_7->display(bot.missShots);
+        ui->lcdNumber_8->display(bot.sunkShips);
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
 /* the game */
 
-
 void MainWindow::theGame( QTableWidgetItem *pItem )
 {
-    Game a(ui->table1, ui->spinBoxWidth->value(), ui->spinBoxHeight->value());
-    a.showMyItem(pItem);
+    Game move(ui->table1, pItem);
+    int hit = move.gameMove(&user);
+    ui->lcdNumber_1->display(user.numberOfShots);
+    ui->lcdNumber_2->display(user.hitShots);
+    ui->lcdNumber_3->display(user.missShots);
+    ui->lcdNumber_4->display(user.sunkShips);
+    qDebug() << "Liczba strzalow = " <<user.numberOfShots;
+    qDebug() << "Trafione = " <<user.hitShots;
+    qDebug() << "Chybione = " <<user.missShots;
+    qDebug() << "Zatopione = " <<user.sunkShips;
 
+    if(hit != 10 && hit != -1)
+         qDebug() << "Jeszcze raz";
 
 }
 
