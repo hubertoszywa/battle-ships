@@ -68,7 +68,9 @@ private slots:
 
 
     // --- game ---
-    void theGame( QTableWidgetItem *pItem );
+    void theGame( QTableWidgetItem *userShot );
+    void botMove();
+    void delay(int secs);
 
 
 private:

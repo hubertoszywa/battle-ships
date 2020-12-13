@@ -158,11 +158,6 @@ int Game::gameMove(Player *player)
 }
 
 
-void Game::botMove()
-{
-
-}
-
 
 
 Game::~Game()

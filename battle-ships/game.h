@@ -25,8 +25,6 @@ public:
     Game(QTableWidget *z, QTableWidgetItem *pItem);
     int gameMove(Player *player);
     void gameCheckFields();
-    void userMove();
-    void botMove();
 
     ~Game();
 
