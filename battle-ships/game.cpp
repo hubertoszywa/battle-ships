@@ -152,7 +152,6 @@ int Game::gameMove(Player *player)
     }
     else
     {
-       qDebug() << "Już tu strzelałeś! Spróbuj ponownie!";
        return -1;
     }
 }

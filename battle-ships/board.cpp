@@ -53,7 +53,6 @@ bool Board::addShip(int shipLength)
     //z jednoczesnym ograniczeniem planszy (tak, żeby statek nie wyszedł "po za"
     int x = rand()%(direction ? boardWidth : (1+boardWidth-shipLength));
     int y = rand()%(direction ? (1+boardHeight-shipLength) : boardHeight);
-    qDebug() << "x=" <<x <<" y=" <<y;
 
     //sprawdzanie czy pola które ma zająć statek są dozwolone (czyli czy nie są 1 lub 2)
     for(int i = 0; i<shipLength; ++i)

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLCDNumber>
+#include "constant.h"
 
 class Player
 {
@@ -16,6 +17,7 @@ public:
     void playerStart();
     void playerShot(int hit);
     void playerUpadteStats(QLCDNumber *screen);
+    bool playerWin();
 
 };
 

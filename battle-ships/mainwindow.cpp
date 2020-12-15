@@ -3,12 +3,7 @@
 #include "game.h"
 #include "player.h"
 #include "ui_mainwindow.h"
-#include <QPixmap>
-#include <QMessageBox>
-#include <QDebug>
-#include <QPalette>
-#include <QTime>
-#include <QRgb>
+
 
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
@@ -25,6 +20,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    count++;
+    ui->clock->display(count/10.0);
+}
 
 
 /* Wyświetlanie i dopasowanie obrazka w tle */
@@ -91,9 +92,6 @@ void MainWindow::on_buttonBackToMenu_clicked()
 
 
 
-
-
-
 /*  rulesPage   */
 
 void MainWindow::on_buttonBackToMenuFromRules_clicked()
@@ -115,6 +113,25 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
+/*  after game  */
+
+void MainWindow::showSummaryPage()
+{
+    timer.stop();
+    ui->stackedWidget->setCurrentWidget(ui->summaryPage);
+    ui->lcd_botAllShots->display(bot.numberOfShots);
+    ui->lcd_botGoodShots->display(bot.hitShots);
+    ui->lcd_botBadShots->display(bot.missShots);
+    ui->lcd_bot10Shots->display(bot.sunkShips);
+
+    ui->lcd_userAllShots->display(user.numberOfShots);
+    ui->lcd_userGoodShots->display(user.hitShots);
+    ui->lcd_userBadShots->display(user.missShots);
+    ui->lcd_user10shots->display(user.sunkShips);
+
+    ui->lcd_gameTime->display(count/10.0);
+
+}
 
 
 /*  before game  */
@@ -148,9 +165,15 @@ void MainWindow::preparingToPlay() {
     myBoard1.createBoard();
     myBoard2.createBoard();
 
+
     // wygenerowanie i rozmieszczenie statków na planszy
     myBoard1.addShipsToBoard();
     myBoard2.addShipsToBoard();
+
+
+    //uruchomienie zegara
+    count = 0;
+    timer.start(60,this);
 
 
     // wylosowanie gracza do pierwszego ruchu (bot czy user)
@@ -207,11 +230,23 @@ void MainWindow::botMove()
     }
     else if(shot == 10)
     {
-        myPallete.setColor(QPalette::Window, Qt::red);
-        myPallete.setColor(QPalette::WindowText, Qt::white);
-        ui->infoBox->setPalette(myPallete);
-        ui->infoBox->setText("Bot zatopił Twój statek! Bot strzela ponownie...");
-        botMove();
+        if(bot.playerWin() == true)
+        {
+            myPallete.setColor(QPalette::Window, Qt::red);
+            myPallete.setColor(QPalette::WindowText, Qt::white);
+            ui->infoBox_3->setPalette(myPallete);
+            ui->infoBox_3->setText("Bot wygrywa! Niestety, przegrałeś...");
+            showSummaryPage();
+        }
+        else
+        {
+            myPallete.setColor(QPalette::Window, Qt::red);
+            myPallete.setColor(QPalette::WindowText, Qt::white);
+            ui->infoBox->setPalette(myPallete);
+            ui->infoBox->setText("Bot zatopił Twój statek! Bot strzela ponownie...");
+            botMove();
+        }
+
     }
     else if(shot == -1)
     {
@@ -241,10 +276,6 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
     ui->lcdNumber_2->display(user.hitShots);
     ui->lcdNumber_3->display(user.missShots);
     ui->lcdNumber_4->display(user.sunkShips);
-    qDebug() << "Liczba strzalow = " <<user.numberOfShots;
-    qDebug() << "Trafione = " <<user.hitShots;
-    qDebug() << "Chybione = " <<user.missShots;
-    qDebug() << "Zatopione = " <<user.sunkShips;
 
     if(shot == 1)
     {
@@ -267,12 +298,22 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Zatopiłeś statek przeciwnika!");
 
-        delay(2);
-
-        myPallete.setColor(QPalette::Window, qRgb(255,255,0));
-        myPallete.setColor(QPalette::WindowText, Qt::black);
-        ui->infoBox->setPalette(myPallete);
-        ui->infoBox->setText("Kontynuuj... Twój ruch!");
+        if(user.playerWin() == true)
+        {
+            myPallete.setColor(QPalette::Window, Qt::green);
+            myPallete.setColor(QPalette::WindowText, Qt::white);
+            ui->infoBox_3->setPalette(myPallete);
+            ui->infoBox_3->setText("Wygrywasz grę!");
+            showSummaryPage();
+        }
+        else
+        {
+            delay(2);
+            myPallete.setColor(QPalette::Window, qRgb(255,255,0));
+            myPallete.setColor(QPalette::WindowText, Qt::black);
+            ui->infoBox->setPalette(myPallete);
+            ui->infoBox->setText("Kontynuuj... Twój ruch!");
+        }
     }
     else if(shot == -1)
     {
@@ -298,4 +339,18 @@ void MainWindow::delay(int secs)
     QTime dieTime= QTime::currentTime().addSecs(secs);
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+
+
+
+void MainWindow::on_buttonBackToMenu_2_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->mainPage);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+    fillSpinBoxes();
 }

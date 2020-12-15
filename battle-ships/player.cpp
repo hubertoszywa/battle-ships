@@ -28,3 +28,12 @@ void Player::playerShot(int hit)
     if(hit == 0)
         missShots++;
 }
+
+
+bool Player::playerWin()
+{
+    if(sunkShips == numberOfShips)
+        return true;
+    else
+        return false;
+}
