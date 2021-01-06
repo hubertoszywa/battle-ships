@@ -45,7 +45,7 @@ void Player::countScore(Player bott, int time, int lvl)
     if (score < 0) score = 0;
 
     if(lvl == -2) level = "Łatwy";
-    if(lvl == -3) level = "Normalny";
+    if(lvl == -3) level = "Średni";
     if(lvl == -4) level = "Trudny";
 
     QString filename = "scores.txt";
@@ -54,4 +54,10 @@ void Player::countScore(Player bott, int time, int lvl)
             QTextStream stream(&file);
             stream << level << Qt::endl << score << Qt::endl;
         }
+    file.close();
 }
+
+
+
+
+

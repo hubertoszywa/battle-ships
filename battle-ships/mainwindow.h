@@ -8,7 +8,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
-
 #include <QPixmap>
 #include <QMessageBox>
 #include <QDebug>
@@ -19,6 +18,11 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QString>
+#include <QFile>
+#include <QTextStream>
+#include <QList>
+#include <QPair>
+#include <QtAlgorithms>
 
 #include "constant.h"
 #include "board.h"
@@ -115,6 +119,10 @@ private slots:
     void on_buttonBackToMenu_2_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_buttonBestScores_clicked();
+
+    void on_buttonBackToMenu_5_clicked();
 
 private:
     Ui::MainWindow *ui;

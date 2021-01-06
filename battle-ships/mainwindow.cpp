@@ -101,6 +101,59 @@ void MainWindow::on_buttonNewGame_clicked()
     fillSpinBoxes();
 }
 
+
+
+bool scoreCompare(QPair<QString, int> score1, QPair<QString, int> score2)
+{
+    return score1.second > score2.second;
+}
+
+void MainWindow::on_buttonBestScores_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->bestScoresPage);
+    QFile file("scores.txt");
+    if(!file.open(QIODevice::ReadOnly)) {
+        ui->labelBestScores->setText("Brak wyników do wyświetlenia.");
+    }
+
+    QTextStream in(&file);
+    QString line;
+    QString line1;
+    QString line2;
+    QList<QPair<QString,int>> items;
+    QPair<QString,int> pair;
+
+
+    while(!in.atEnd()) {
+        line1 = in.readLine();
+        line2 = in.readLine();
+
+
+        pair.first = line1;
+        pair.second = line2.toInt();
+        items.append(pair);
+    }
+
+    if(items.isEmpty())
+        ui->labelBestScores->setText("Brak wyników do wyświetlenia.");
+    else
+    {
+        std::sort(items.begin(), items.end(), scoreCompare);
+        int i = 1;
+        foreach(auto &x,items)
+        {
+            line.append(QString::number(i) + ". " + QString::number(x.second) + " / " + x.first + "\n");
+            i++;
+            if(i == 11)
+                break;
+        }
+        ui->labelBestScores->setText(line);
+    }
+
+    file.close();
+}
+
+
 void MainWindow::on_buttonRules_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->rulesPage);
@@ -149,8 +202,8 @@ void MainWindow::fillSpinBoxes()
 void MainWindow::on_buttonBackToMenu_clicked()
 {
      ui->stackedWidget->setCurrentWidget(ui->mainPage);
-}
 
+}
 
 void MainWindow::on_buttonStartGame_clicked()
 {
@@ -671,4 +724,20 @@ Point MainWindow::fieldBasedLvl(int level)
             return temp;
         }
     }
+}
+
+
+
+
+
+/* najlepsze wyniki */
+
+
+
+
+void MainWindow::on_buttonBackToMenu_5_clicked()
+{
+   ui->stackedWidget->setCurrentWidget(ui->mainPage);
+
+
 }
