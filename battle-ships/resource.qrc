@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/resources">
         <file>assets/img/main-photo.png</file>
+        <file>assets/sounds/hit-sound.mp3</file>
+        <file>assets/sounds/sink-sound.mp3</file>
+        <file>assets/sounds/water-sound.mp3</file>
+        <file>assets/music/game-music.mp3</file>
+        <file>assets/music/menu-music.mp3</file>
     </qresource>
 </RCC>

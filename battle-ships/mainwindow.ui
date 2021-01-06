@@ -42,7 +42,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="mainPage">
        <widget class="QWidget" name="layoutWidget">
@@ -422,7 +422,7 @@
          <string>Wróć do menu głównego</string>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>340</x>
@@ -485,6 +485,9 @@
            <property name="checked">
             <bool>true</bool>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -519,6 +522,9 @@
            <property name="checked">
             <bool>false</bool>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -559,13 +565,14 @@
            <property name="text">
             <string>Trudny</string>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
           </widget>
          </item>
         </layout>
-        <zorder>radioHardGame</zorder>
-        <zorder>radioMediumGame</zorder>
-        <zorder>radioEasyGame</zorder>
        </widget>
+       <zorder>layoutWidget</zorder>
        <zorder>labelLevel</zorder>
        <zorder>labelWidth</zorder>
        <zorder>labelHeight</zorder>
@@ -4635,4 +4642,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

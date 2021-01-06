@@ -16,10 +16,13 @@
 #include <QTime>
 #include <QBasicTimer>
 #include <QRgb>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 #include "constant.h"
 #include "board.h"
 #include "player.h"
+#include "ships.h"
 
 
 
@@ -31,9 +34,21 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+
 public:
     MainWindow(QWidget *parent = nullptr);
+
     ~MainWindow();
+
+    Point fieldBasedLvl(int level);
+
+
+
+    Point prevShotField;
+
+    Point tempField;
+
+    bool firstShotInShip = true;
 
 
 protected:
@@ -51,20 +66,23 @@ private slots:
 
     void on_buttonExit_clicked();
 
+    void setMusic();
+
 
     // --- optionGamePage ---
 
     void on_buttonBackToMenu_clicked();
-    void on_buttonBackToMenu2_clicked();
 
     void fillSpinBoxes();
+
+    void on_buttonStartGame_clicked();
 
 
     // --- rulesPage ---
 
     void on_buttonBackToMenuFromRules_clicked();
 
-    void on_buttonStartGame_clicked();
+
 
 
     // --- before game ---
@@ -82,13 +100,16 @@ private slots:
 
     /* Opóźnienie ruchu dla bota symulujące, że się zastanawia... */
     void delay(int secs);
+
     void timerEvent(QTimerEvent *event);
+
+
+
 
 
 
     // --- after game ---
     void showSummaryPage();
-
 
     void on_buttonBackToMenu_2_clicked();
 
@@ -100,6 +121,11 @@ private:
     Player bot;
     QBasicTimer timer;
     int count;
+    QMediaPlayer * music1 = new QMediaPlayer();
+    QMediaPlayer * music2 = new QMediaPlayer();
+    QMediaPlayer * sinkSound = new QMediaPlayer();
+    QMediaPlayer * hitSound = new QMediaPlayer();
+    QMediaPlayer * waterSound = new QMediaPlayer();
 
 };
 

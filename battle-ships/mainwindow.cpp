@@ -21,11 +21,28 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::timerEvent(QTimerEvent *event)
+
+/* Ustalenie sciezek dzwiekowych */
+void MainWindow::setMusic()
 {
-    count++;
-    ui->clock->display(count/10.0);
+    QMediaPlaylist *playlist = new QMediaPlaylist();
+    playlist->addMedia(QUrl("qrc:/resources/assets/music/menu-music.mp3"));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    music1->setPlaylist(playlist);
+
+    music1->play();
+
+    QMediaPlaylist *playlist2 = new QMediaPlaylist();
+    playlist2->addMedia(QUrl("qrc:/resources/assets/music/game-music.mp3"));
+    playlist2->setPlaybackMode(QMediaPlaylist::Loop);
+    music2->setPlaylist(playlist2);
+
+    waterSound->setMedia(QUrl("qrc:/resources/assets/sounds/water-sound.mp3"));
+    hitSound->setMedia(QUrl("qrc:/resources/assets/sounds/hit-sound.mp3"));
+    sinkSound->setMedia(QUrl("qrc:/resources/assets/sounds/sink-sound.mp3"));
 }
+
+
 
 
 /* Wyświetlanie i dopasowanie obrazka w tle */
@@ -39,8 +56,43 @@ void MainWindow::resizeEvent(QResizeEvent* evt)
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
 
+    setMusic();
+
     QMainWindow::resizeEvent(evt); // call inherited implementation
 }
+
+
+
+/* Uruchomienie licznika czasu na starcie gry */
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    count++;
+    ui->clock->display(count/10.0);
+}
+
+
+
+
+
+/* Opóźnienie w ruchu bota */
+void MainWindow::delay(int secs)
+{
+    QTime dieTime= QTime::currentTime().addSecs(secs);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* main window */
 
 
 void MainWindow::on_buttonNewGame_clicked()
@@ -74,6 +126,15 @@ void MainWindow::on_buttonExit_clicked()
 
 
 
+
+
+
+
+
+
+
+
+
 /*  optionGamePage   */
 
 void MainWindow::fillSpinBoxes()
@@ -91,6 +152,38 @@ void MainWindow::on_buttonBackToMenu_clicked()
 }
 
 
+void MainWindow::on_buttonStartGame_clicked()
+{
+
+    music1->stop();
+    music2->play();
+    ui->stackedWidget->setCurrentWidget(ui->gamePage);
+    preparingToPlay();
+
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    music2->stop();
+    music1->play();
+    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+    fillSpinBoxes();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*  rulesPage   */
 
@@ -99,39 +192,18 @@ void MainWindow::on_buttonBackToMenuFromRules_clicked()
     ui->stackedWidget->setCurrentWidget(ui->mainPage);
 }
 
-void MainWindow::on_buttonStartGame_clicked()
-{
-    ui->stackedWidget->setCurrentWidget(ui->gamePage);
-    preparingToPlay();
-
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
-    fillSpinBoxes();
-}
 
 
-/*  after game  */
 
-void MainWindow::showSummaryPage()
-{
-    timer.stop();
-    ui->stackedWidget->setCurrentWidget(ui->summaryPage);
-    ui->lcd_botAllShots->display(bot.numberOfShots);
-    ui->lcd_botGoodShots->display(bot.hitShots);
-    ui->lcd_botBadShots->display(bot.missShots);
-    ui->lcd_bot10Shots->display(bot.sunkShips);
 
-    ui->lcd_userAllShots->display(user.numberOfShots);
-    ui->lcd_userGoodShots->display(user.hitShots);
-    ui->lcd_userBadShots->display(user.missShots);
-    ui->lcd_user10shots->display(user.sunkShips);
 
-    ui->lcd_gameTime->display(count/10.0);
 
-}
+
+
+
+
+
+
 
 
 /*  before game  */
@@ -176,6 +248,11 @@ void MainWindow::preparingToPlay() {
     timer.start(60,this);
 
 
+    //ustalenie poczatkowych wartosci dla zmiennej przychowujacej informacje o ostanim ruchu
+    prevShotField.col = -1;
+    prevShotField.row = -1;
+
+
     // wylosowanie gracza do pierwszego ruchu (bot czy user)
     int random = rand()%2;
     if(random == 1)
@@ -201,41 +278,126 @@ void MainWindow::preparingToPlay() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/*  after game  */
+
+void MainWindow::showSummaryPage()
+{
+    music2->stop();
+    music1->play();
+
+    timer.stop();
+    ui->stackedWidget->setCurrentWidget(ui->summaryPage);
+    ui->lcd_botAllShots->display(bot.numberOfShots);
+    ui->lcd_botGoodShots->display(bot.hitShots);
+    ui->lcd_botBadShots->display(bot.missShots);
+    ui->lcd_bot10Shots->display(bot.sunkShips);
+
+    ui->lcd_userAllShots->display(user.numberOfShots);
+    ui->lcd_userGoodShots->display(user.hitShots);
+    ui->lcd_userBadShots->display(user.missShots);
+    ui->lcd_user10shots->display(user.sunkShips);
+
+    ui->lcd_gameTime->display(count/10.0);
+
+}
+
+void MainWindow::on_buttonBackToMenu_2_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->mainPage);
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+    fillSpinBoxes();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ruch bota */
+
 void MainWindow::botMove()
 {
-    delay(3);
+    delay(2); //sztuczne opóźnienie ruchu bota
 
     QPalette myPallete;
+    QTableWidgetItem *botShot;
+    Point currShotField;
+    int btn_id = 0;
+
     myPallete.setColor(QPalette::Window, Qt::gray);
     myPallete.setColor(QPalette::WindowText, Qt::white);
     ui->infoBox->setPalette(myPallete);
     ui->infoBox->setText("Strzela bot...");
 
-    QTableWidgetItem *botShot;
-    botShot = ui->table2->item(rand()%ui->table2->columnCount()+0, rand()%ui->table2->rowCount()+0 );
+    btn_id = ui->buttonGroup->checkedId(); // pobranie ID wybranego poziomu trudności
+    currShotField = fieldBasedLvl(btn_id); // wylosowanie współrzędnych pola do strzału
+    botShot = ui->table2->item(currShotField.row, currShotField.col);
+
     Game move(ui->table2, botShot);
     int shot = move.gameMove(&bot);
+
     ui->lcdNumber_5->display(bot.numberOfShots);
     ui->lcdNumber_6->display(bot.hitShots);
     ui->lcdNumber_7->display(bot.missShots);
     ui->lcdNumber_8->display(bot.sunkShips);
 
+
+    // podjęcie decyzji w zależności od tego czy strzał był celny (statek trafiony lub zatopiony) czy niecelny
     if(shot == 1)
     {
         myPallete.setColor(QPalette::Window, Qt::blue);
         myPallete.setColor(QPalette::WindowText, Qt::white);
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Bot trafił w Twój statek! Bot strzela ponownie...");
+        hitSound->play();
+        prevShotField.col = currShotField.col;
+        prevShotField.row = currShotField.row;
+        if(firstShotInShip)
+        {
+            tempField.col = currShotField.col;
+            tempField.row = currShotField.row;
+            firstShotInShip = false;
+        }
         botMove();
     }
     else if(shot == 10)
     {
+        prevShotField.col = -1; prevShotField.row = -1;
+        firstShotInShip = true;
+        sinkSound->play();
         if(bot.playerWin() == true)
         {
             myPallete.setColor(QPalette::Window, Qt::red);
             myPallete.setColor(QPalette::WindowText, Qt::white);
             ui->infoBox_3->setPalette(myPallete);
-            ui->infoBox_3->setText("Bot wygrywa! Niestety, przegrałeś...");
+            ui->infoBox_3->setText("Bot wygrywa! Niestety, przegrałeś..."); 
             showSummaryPage();
         }
         else
@@ -248,16 +410,13 @@ void MainWindow::botMove()
         }
 
     }
-    else if(shot == -1)
-    {
-        botMove();
-    }
     else
     {
         myPallete.setColor(QPalette::Window, qRgb(255,255,0));
         myPallete.setColor(QPalette::WindowText, Qt::black);
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Twój ruch...");
+        waterSound->play();
     }
 }
 
@@ -265,7 +424,11 @@ void MainWindow::botMove()
 
 
 
-/* the game */
+
+
+
+
+/* ruch gracza */
 
 void MainWindow::theGame( QTableWidgetItem *userShot )
 {
@@ -283,6 +446,7 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
         myPallete.setColor(QPalette::WindowText, Qt::white);
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Trafiłeś w statek przeciwnika!");
+        hitSound->play();
 
         delay(2);
 
@@ -297,6 +461,7 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
         myPallete.setColor(QPalette::WindowText, Qt::white);
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Zatopiłeś statek przeciwnika!");
+        sinkSound->play();
 
         if(user.playerWin() == true)
         {
@@ -328,29 +493,178 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
         myPallete.setColor(QPalette::WindowText, Qt::white);
         ui->infoBox->setPalette(myPallete);
         ui->infoBox->setText("Strzela bot...");
+        waterSound->play();
         botMove();
     }
 }
 
 
 
-void MainWindow::delay(int secs)
+
+
+
+
+
+
+
+/* wybranie odpowiedniego pola strzalu dla bota w zaleznosci od poziomu trudnosci*/
+
+
+Point MainWindow::fieldBasedLvl(int level)
 {
-    QTime dieTime= QTime::currentTime().addSecs(secs);
-    while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-}
+    srand(time(NULL));
+    Point temp;
+    QTableWidgetItem * a;
+    int whatIn;
+
+    //POZIOM ŁATWY
+    if(level == -2)
+    {
+        while(1)
+        {
+            temp.col = rand()%ui->table2->columnCount()+0;
+            temp.row = rand()%ui->table2->rowCount()+0;
+            a = ui->table2->item(temp.row , temp.col); whatIn = a->text().toInt();
+            if(whatIn <= 0 || (whatIn >= 1 && whatIn <=9)) break;
+        }
+
+        return temp;
+    }
 
 
 
 
-void MainWindow::on_buttonBackToMenu_2_clicked()
-{
-    ui->stackedWidget->setCurrentWidget(ui->mainPage);
-}
+    //POZIOM NORMALNY
+    else if (level == -3)
+    {
+        //jeżeli poprzedni strzał był niecelny, wybierz nowe pole losowo
+        if(prevShotField.col == -1)
+        {
+            while(1)
+            {
+                temp.col = rand()%ui->table2->columnCount()+0;
+                temp.row = rand()%ui->table2->rowCount()+0;
+                a = ui->table2->item(temp.row , temp.col); whatIn = a->text().toInt();
+                if(whatIn <= 0 || (whatIn >= 1 && whatIn <=9)) break;
+            }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
-    fillSpinBoxes();
+            return temp;
+        }
+
+        //jeżeli poprzedni strzał byl celny, strzelaj niedaleko...
+        else
+        {
+            int x, y;
+            bool stillwhile = false;
+
+            do
+            {
+                //losowanie kierunku strzału
+                bool direction = false ; // false - poziomo, true - pionowo
+                int r = rand()%2; if(r == 0) direction = true;
+
+
+                //losowanie pola strzału (w lewo lub w prawo lub w górę lub w dół)
+                r = rand()%2;
+                if(direction == false)
+                {
+                    if(r == 0) {x = prevShotField.col; y = prevShotField.row + 1; } //w prawo
+                    else {x = prevShotField.col; y = prevShotField.row - 1; } //w lewo
+                }
+                else
+                {
+                    if(r == 0) { x = prevShotField.col + 1; y = prevShotField.row; } //w górę
+                    else { x = prevShotField.col - 1; y = prevShotField.row; } //w dół
+                }
+
+
+                //weryfikacja czy po przesunieciu nie wyszliśmy spoza planszy
+                if(x >= ui->spinBoxWidth->value()) x = prevShotField.col - 1;
+                if(x < 0) x = prevShotField.col + 1;
+                if(y >= ui->spinBoxHeight->value()) y = prevShotField.row - 1;
+                if(y < 0) y = prevShotField.row + 1;
+
+
+                a = ui->table2->item(y, x);
+                whatIn = a->text().toInt();
+                stillwhile = false;
+
+                if(whatIn > 10 && whatIn < 1000 )
+                {
+                    prevShotField.col = x;
+                    prevShotField.row = y;
+                    stillwhile = true;
+                }
+
+                if(whatIn == 1000) stillwhile = true;
+
+            } while(stillwhile);
+
+            temp.col = x;
+            temp.row = y;
+
+            return temp;
+        }
+    }
+
+
+
+    //POZIOM TRUDNY
+    else
+    {
+       //jeżeli poprzedni strzał był niecelny, wybierz nowe pole losowo
+        if(prevShotField.col == -1)
+        {
+            while(1)
+            {
+                temp.col = rand()%ui->table2->columnCount()+0;
+                temp.row = rand()%ui->table2->rowCount()+0;
+                a = ui->table2->item(temp.row , temp.col); whatIn = a->text().toInt();
+                if(whatIn < 0 || (whatIn >= 1 && whatIn <=9)) break;
+            }
+
+            return temp;
+        }
+
+        //jeżeli poprzedni strzał byl celny, zestrzel statek...
+        else
+        {
+            int x, y;
+
+            while(1)
+            {
+                x = prevShotField.col; y = prevShotField.row + 1;
+                if(y >= ui->spinBoxHeight->value()) y = prevShotField.row - 1;
+                if(y < 0) y = prevShotField.row + 1;
+                a = ui->table2->item(y, x); whatIn = a->text().toInt();
+                if(whatIn > 1 && whatIn < 10) break;
+
+                x = prevShotField.col; y = prevShotField.row - 1;
+                if(y >= ui->spinBoxHeight->value()) y = prevShotField.row - 1;
+                if(y < 0) y = prevShotField.row + 1;
+                a = ui->table2->item(y, x); whatIn = a->text().toInt();
+                if(whatIn > 1 && whatIn < 10) break;
+
+                x = prevShotField.col + 1; y = prevShotField.row;
+                if(x >= ui->spinBoxWidth->value()) x = prevShotField.col - 1;
+                if(x < 0) x = prevShotField.col + 1;
+                a = ui->table2->item(y, x); whatIn = a->text().toInt();
+                if(whatIn > 1 && whatIn < 10) break;
+
+                x = prevShotField.col - 1; y = prevShotField.row;
+                if(x >= ui->spinBoxWidth->value()) x = prevShotField.col - 1;
+                if(x < 0) x = prevShotField.col + 1;
+                a = ui->table2->item(y, x); whatIn = a->text().toInt();
+                if(whatIn > 1 && whatIn < 10) break;
+
+                prevShotField.col = tempField.col;
+                prevShotField.row = tempField.row;
+            }
+
+            temp.col = x;
+            temp.row = y;
+
+            return temp;
+        }
+    }
 }
