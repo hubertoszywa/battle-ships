@@ -37,3 +37,21 @@ bool Player::playerWin()
     else
         return false;
 }
+
+
+void Player::countScore(Player bott, int time, int lvl)
+{
+    score = hitShots*100 - missShots*10 - bott.hitShots*10 - time;
+    if (score < 0) score = 0;
+
+    if(lvl == -2) level = "Łatwy";
+    if(lvl == -3) level = "Normalny";
+    if(lvl == -4) level = "Trudny";
+
+    QString filename = "scores.txt";
+        QFile file(filename);
+        if (file.open(QIODevice::ReadWrite | QIODevice::Append)) {
+            QTextStream stream(&file);
+            stream << level << Qt::endl << score << Qt::endl;
+        }
+}

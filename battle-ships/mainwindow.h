@@ -18,6 +18,7 @@
 #include <QRgb>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QString>
 
 #include "constant.h"
 #include "board.h"

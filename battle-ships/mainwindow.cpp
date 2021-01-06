@@ -309,6 +309,10 @@ void MainWindow::showSummaryPage()
     ui->lcd_user10shots->display(user.sunkShips);
 
     ui->lcd_gameTime->display(count/10.0);
+    user.countScore(bot, count/10.0, ui->buttonGroup->checkedId());
+    ui->lcd_gameScore->display(user.score);
+    qDebug() << "Poziom trudnosci = " << user.level;
+
 
 }
 
