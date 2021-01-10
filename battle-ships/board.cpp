@@ -1,11 +1,12 @@
 #include "board.h"
 
 
-Board::Board(int x, int y, QTableWidget *z)
+Board::Board(int x, int y, QTableWidget *z, bool ut)
 {   
     boardWidth = x;
     boardHeight = y;
     myTable = z;
+    userTable = ut;
 }
 
 
@@ -34,13 +35,12 @@ void Board::makeWater()
             myTable->setItem(i,j,new QTableWidgetItem(QString::number(-1)));
 }
 
-void Board::addShipsToBoard()
+void Board::addShipsToBoard(QColor c1)
 {
-    for(int i=0; i < numberOfShips; ++i)
-    {
-        while(!addShip(ships[i]));
+    colorNormal = c1;
 
-    }
+    for(int i=0; i < numberOfShips; ++i)
+        while(!addShip(ships[i]));
 }
 
 
@@ -71,7 +71,8 @@ bool Board::addShip(int shipLength)
     for(int i = 0; i<shipLength; i++)
     {
         myTable->setItem((direction ? x : x+i), (direction ? y+i : y), new QTableWidgetItem(QString::number(shipLength)));
-        myTable->item((direction ? x : x+i), (direction ? y+i : y))->setBackground(Qt::red);
+        if(userTable == false)
+            myTable->item((direction ? x : x+i), (direction ? y+i : y))->setBackground(colorNormal);
 
         for(int k = (direction ? x-1 : x+i-1); k <= (direction ? x+1 : x+i+1); k++)
         {

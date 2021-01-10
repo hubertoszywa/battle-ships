@@ -7,23 +7,27 @@
 #include "mainwindow.h"
 #include "game.h"
 #include <QDebug>
+#include <QColor>
+#include <QTableWidget>
 
 
-class Board : public QTableWidget
+class Board: public QTableWidget
 {
 private:
     int boardWidth;
     int boardHeight;
     QTableWidget *myTable;
+    bool userTable;
+    QColor colorNormal;
 
     void makeWater();
     bool addShip(int shipLength);
 
 public:
-    Board(int, int, QTableWidget *);
+    Board(int, int, QTableWidget *, bool);
 
     void createBoard();
-    void addShipsToBoard();
+    void addShipsToBoard(QColor);
 
     ~Board();
 };

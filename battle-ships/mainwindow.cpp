@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->setupUi(this);
     ui->statusbar2->showMessage("Battle Ships v1.1.4", 5000);
     connect( ui->table1, &Board::itemClicked, this, &MainWindow::theGame );
+    ui->table1->verticalHeader()->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignHCenter; }");
+    ui->table2->verticalHeader()->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignHCenter; }");
 }
 
 
@@ -99,6 +101,7 @@ void MainWindow::on_buttonNewGame_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
     fillSpinBoxes();
+    setPreviewColor();
 }
 
 
@@ -199,6 +202,27 @@ void MainWindow::fillSpinBoxes()
 }
 
 
+void MainWindow::setPreviewColor()
+{
+    QPalette pal = ui->shipsColor1->palette();
+    pal.setColor(QPalette::Window, QColor(c1));
+    ui->shipsColor1->setPalette(pal);
+
+    pal = ui->shipsColor2->palette();
+    pal.setColor(QPalette::Window, QColor(c2));
+    ui->shipsColor2->setPalette(pal);
+
+    pal = ui->shipsColor3->palette();
+    pal.setColor(QPalette::Window, QColor(c3));
+    ui->shipsColor3->setPalette(pal);
+
+    pal = ui->shipsColor4->palette();
+    pal.setColor(QPalette::Window, QColor(c4));
+    ui->shipsColor4->setPalette(pal);
+
+}
+
+
 void MainWindow::on_buttonBackToMenu_clicked()
 {
      ui->stackedWidget->setCurrentWidget(ui->mainPage);
@@ -217,10 +241,18 @@ void MainWindow::on_buttonStartGame_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
-    music2->stop();
-    music1->play();
-    ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
-    fillSpinBoxes();
+    QString exitPlay = "Czy na pewno chcesz zakończyć aktualną rozgrywkę?";
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Zakończyć grę?", exitPlay, QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        music2->stop();
+        music1->play();
+        ui->stackedWidget->setCurrentWidget(ui->optionGamePage);
+        fillSpinBoxes();
+        setPreviewColor();
+    }
+    else { qDebug() << "Użytkownik chciał opuścic rozgrywkę, ale tego nie zrobił"; }
 }
 
 
@@ -285,15 +317,15 @@ void MainWindow::preparingToPlay() {
 
 
     // wygenerowanie tablicy dla gracza i bota
-    Board myBoard1(width, height, ui->table1);
-    Board myBoard2(width, height, ui->table2);
+    Board myBoard1(width, height, ui->table1, true);
+    Board myBoard2(width, height, ui->table2, false);
     myBoard1.createBoard();
     myBoard2.createBoard();
 
 
     // wygenerowanie i rozmieszczenie statków na planszy
-    myBoard1.addShipsToBoard();
-    myBoard2.addShipsToBoard();
+    myBoard1.addShipsToBoard(c1);
+    myBoard2.addShipsToBoard(c1);
 
 
     //uruchomienie zegara
@@ -418,7 +450,7 @@ void MainWindow::botMove()
     botShot = ui->table2->item(currShotField.row, currShotField.col);
 
     Game move(ui->table2, botShot);
-    int shot = move.gameMove(&bot);
+    int shot = move.gameMove(&bot, c2, c3, c4);
 
     ui->lcdNumber_5->display(bot.numberOfShots);
     ui->lcdNumber_6->display(bot.hitShots);
@@ -491,7 +523,7 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
 {
     QPalette myPallete;
     Game move(ui->table1, userShot);
-    int shot = move.gameMove(&user);
+    int shot = move.gameMove(&user, c2, c3, c4);
     ui->lcdNumber_1->display(user.numberOfShots);
     ui->lcdNumber_2->display(user.hitShots);
     ui->lcdNumber_3->display(user.missShots);
@@ -602,7 +634,7 @@ Point MainWindow::fieldBasedLvl(int level)
                 temp.col = rand()%ui->table2->columnCount()+0;
                 temp.row = rand()%ui->table2->rowCount()+0;
                 a = ui->table2->item(temp.row , temp.col); whatIn = a->text().toInt();
-                if(whatIn <= 0 || (whatIn >= 1 && whatIn <=9)) break;
+                if(whatIn < 0 || (whatIn >= 1 && whatIn <=9)) break;
             }
 
             return temp;
@@ -740,4 +772,52 @@ void MainWindow::on_buttonBackToMenu_5_clicked()
    ui->stackedWidget->setCurrentWidget(ui->mainPage);
 
 
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+
+    c1 = QColorDialog::getColor(Qt::red, this, "Wybierz kolor");
+    if(c1.isValid())
+    {
+        QPalette pal = ui->shipsColor1->palette();
+        pal.setColor(QPalette::Window, QColor(c1));
+        ui->shipsColor1->setPalette(pal);
+    }
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    c2 = QColorDialog::getColor(Qt::yellow, this, "Wybierz kolor");
+    if(c1.isValid())
+    {
+        QPalette pal = ui->shipsColor2->palette();
+        pal.setColor(QPalette::Window, QColor(c2));
+        ui->shipsColor2->setPalette(pal);
+    }
+}
+
+
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    c3 = QColorDialog::getColor(Qt::green, this, "Wybierz kolor");
+    if(c1.isValid())
+    {
+        QPalette pal = ui->shipsColor3->palette();
+        pal.setColor(QPalette::Window, QColor(c3));
+        ui->shipsColor3->setPalette(pal);
+    }
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    c4 = QColorDialog::getColor(Qt::gray, this, "Wybierz kolor");
+    if(c1.isValid())
+    {
+        QPalette pal = ui->shipsColor4->palette();
+        pal.setColor(QPalette::Window, QColor(c4));
+        ui->shipsColor4->setPalette(pal);
+    }
 }

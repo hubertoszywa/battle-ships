@@ -23,6 +23,8 @@
 #include <QList>
 #include <QPair>
 #include <QtAlgorithms>
+#include <QColor>
+#include <QColorDialog>
 
 #include "constant.h"
 #include "board.h"
@@ -55,6 +57,14 @@ public:
 
     bool firstShotInShip = true;
 
+    QColor c1 = Qt::red; //kolor nietrafionego masztu
+
+    QColor c2 = Qt::yellow; //kolor trafionego masztu
+
+    QColor c3 = Qt::green; //kolor zatopionego statku
+
+    QColor c4 = Qt::gray; //kolor pól gdzie nie ma statków (wody)
+
 
 protected:
     void resizeEvent(QResizeEvent* evt) override;
@@ -81,6 +91,8 @@ private slots:
     void fillSpinBoxes();
 
     void on_buttonStartGame_clicked();
+
+    void setPreviewColor();
 
 
     // --- rulesPage ---
@@ -123,6 +135,14 @@ private slots:
     void on_buttonBestScores_clicked();
 
     void on_buttonBackToMenu_5_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
+
+    void on_pushButton_6_clicked();
 
 private:
     Ui::MainWindow *ui;

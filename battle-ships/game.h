@@ -23,7 +23,7 @@ private:
 
 public:
     Game(QTableWidget *z, QTableWidgetItem *pItem);
-    int gameMove(Player *player);
+    int gameMove(Player *player, QColor, QColor, QColor);
     void gameCheckFields();
 
     ~Game();

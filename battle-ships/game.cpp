@@ -101,12 +101,12 @@ void Game::gameCheckFields()
 
 
 
-int Game::gameMove(Player *player)
+int Game::gameMove(Player *player, QColor c2, QColor c3, QColor c4)
 {
     if(itemVal == 1)
     {
         myBoard->setItem(itemX, itemY, new QTableWidgetItem(QString::number(100)));
-        myBoard->item(itemX,itemY)->setBackground(Qt::green);
+        myBoard->item(itemX,itemY)->setBackground(c3);
         myBoard->item(itemX,itemY)->setFlags(Qt::ItemIsEditable);
         player->playerShot(10);
         return 10;
@@ -115,7 +115,7 @@ int Game::gameMove(Player *player)
     else if (itemVal == -1 || itemVal == 0)
     {
         myBoard->setItem(itemX, itemY, new QTableWidgetItem(QString::number(1000)));
-        myBoard->item(itemX,itemY)->setBackground(Qt::gray);
+        myBoard->item(itemX,itemY)->setBackground(c4);
         player->playerShot(0);
         return 0;
     }
@@ -125,7 +125,7 @@ int Game::gameMove(Player *player)
         Point temp;
 
         myBoard->setItem(itemX,itemY, new QTableWidgetItem(QString::number(itemVal*10)));
-        myBoard->item(itemX,itemY)->setBackground(Qt::yellow);
+        myBoard->item(itemX,itemY)->setBackground(c2);
 
         hittedCoordinates.row = itemX;
         hittedCoordinates.col = itemY;
@@ -141,7 +141,7 @@ int Game::gameMove(Player *player)
             {
                 temp = hitted[i];
                 myBoard->setItem(temp.row, temp.col, new QTableWidgetItem(QString::number(itemVal*100)));
-                myBoard->item(temp.row,temp.col)->setBackground(Qt::green);
+                myBoard->item(temp.row,temp.col)->setBackground(c3);
                 myBoard->item(temp.row,temp.col)->setFlags(Qt::ItemIsEditable);
             }
             player->playerShot(10);
