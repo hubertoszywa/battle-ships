@@ -1,3 +1,9 @@
+/*!
+*@file player.cpp
+*@brief Funkcje z tej biblioteki zawierają mechanizmy do zliczania i zapisywania statystyk gracza.
+*/
+
+
 #include "player.h"
 
 Player::Player(){}
@@ -32,7 +38,7 @@ void Player::playerShot(int hit)
 
 bool Player::playerWin()
 {
-    if(sunkShips == numberOfShips)
+    if(sunkShips == NUMBEROFSHIPS)
         return true;
     else
         return false;
@@ -56,8 +62,3 @@ void Player::countScore(Player bott, int time, int lvl)
         }
     file.close();
 }
-
-
-
-
-

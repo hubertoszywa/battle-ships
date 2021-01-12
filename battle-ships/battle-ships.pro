@@ -14,8 +14,7 @@ SOURCES += \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
-    player.cpp \
-    ships.cpp
+    player.cpp
 
 HEADERS += \
     board.h \

@@ -1,4 +1,16 @@
+/*!
+*@file board.cpp
+*@brief Funkcje z tej biblioteki realizaują operacje tworzenia widoku plansz ze statkami oraz dodawania statków na planszach przy zachowaniu losowego ułożenia i obowiązujących zasad gry w statki.
+*/
+
 #include "board.h"
+
+
+
+
+
+
+//------------ PUBLIC ------------
 
 
 Board::Board(int x, int y, QTableWidget *z, bool ut)
@@ -9,6 +21,11 @@ Board::Board(int x, int y, QTableWidget *z, bool ut)
     userTable = ut;
 }
 
+
+Board::~Board()
+{
+
+}
 
 
 void Board::createBoard()
@@ -28,6 +45,24 @@ void Board::createBoard()
     makeWater();
 }
 
+
+
+void Board::addShipsToBoard(QColor c1)
+{
+    colorNormal = c1;
+
+    for(int i=0; i < NUMBEROFSHIPS; ++i)
+        while(!addShip(SHIPS[i]));
+}
+
+
+
+
+
+
+//------------ PRIVATE ------------
+
+
 void Board::makeWater()
 {
     for(int i=0; i < boardWidth; i++)
@@ -35,13 +70,8 @@ void Board::makeWater()
             myTable->setItem(i,j,new QTableWidgetItem(QString::number(-1)));
 }
 
-void Board::addShipsToBoard(QColor c1)
-{
-    colorNormal = c1;
 
-    for(int i=0; i < numberOfShips; ++i)
-        while(!addShip(ships[i]));
-}
+
 
 
 bool Board::addShip(int shipLength)
@@ -91,10 +121,4 @@ bool Board::addShip(int shipLength)
         }
     }
     return true;
-}
-
-
-Board::~Board()
-{
-
 }

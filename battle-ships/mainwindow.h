@@ -1,3 +1,8 @@
+/*!
+*@file game.h
+*@brief Plik nagłówkowy do biblioteki mainwindows.cpp, przechowuje deklaracje funkcji.
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -25,45 +30,78 @@
 #include <QtAlgorithms>
 #include <QColor>
 #include <QColorDialog>
-
 #include "constant.h"
 #include "board.h"
 #include "player.h"
 #include "ships.h"
 
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
+
+
+/*!
+ * \brief Klasa zawierająca główny silnik gry. Pozwala na detekcję ruchów gracza oraz decydowanie o tym czyja jest kolej na oddanie strzału - gracza czy bota.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 
 public:
+    /*!
+     * \brief MainWindow - Kontruktor klasy
+     * \param parent
+     */
     MainWindow(QWidget *parent = nullptr);
 
+
+    /*!
+    *\brief Dekonstruktor klasy
+    */
     ~MainWindow();
 
-    Point fieldBasedLvl(int level);
 
 
 
+    // ---------- ZMIENNE PUBLICZNE ----------
+
+    /** Współrzędne ostatnio oddanego strzału*/
     Point prevShotField;
 
+    /** Współrzędne tymczasowe (zmienna pomocnicza) */
     Point tempField;
 
+    /** Zmienna przechowująca informację, czy oddawany strzał w statek był pierwszy czy nie: True - pierwszy strzał w statek, False - kolejne strzały w statek*/
     bool firstShotInShip = true;
 
-    QColor c1 = Qt::red; //kolor nietrafionego masztu
+    /** Kolor nietrafionego masztu */
+    QColor c1 = Qt::red;
 
-    QColor c2 = Qt::yellow; //kolor trafionego masztu
+    /** Kolor trafionego masztu */
+    QColor c2 = Qt::yellow;
 
-    QColor c3 = Qt::green; //kolor zatopionego statku
+    /** Kolor zatopionego statku */
+    QColor c3 = Qt::green;
 
-    QColor c4 = Qt::gray; //kolor pól gdzie nie ma statków (wody)
+    /** Kolor pól gdzie nie ma statków (wody) */
+    QColor c4 = Qt::gray;
+
+
+
+
+
+    // ---------- METODY PUBLICZNE ----------
+    /*!
+     * \brief fieldBasedLvl - Funkcja losująca współrzędne punktu dla bota w zależności od wybranego poziomu trudności
+     * \param level - Informacja o poziomie trudności
+     * \return - Współrzędne wylosowanego punktu do strzału przez bota
+     */
+    Point fieldBasedLvl(int level);
+
 
 
 protected:
@@ -74,6 +112,8 @@ private slots:
     // --- mainPage ---
 
     void on_buttonNewGame_clicked();
+
+    void on_buttonBestScores_clicked();
 
     void on_buttonRules_clicked();
 
@@ -93,6 +133,16 @@ private slots:
     void on_buttonStartGame_clicked();
 
     void setPreviewColor();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
+
+    void on_pushButton_6_clicked();
+
+
 
 
     // --- rulesPage ---
@@ -122,9 +172,6 @@ private slots:
 
 
 
-
-
-
     // --- after game ---
     void showSummaryPage();
 
@@ -132,17 +179,16 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void on_buttonBestScores_clicked();
+
+
+    // --- best scores page ---
+
 
     void on_buttonBackToMenu_5_clicked();
 
-    void on_pushButton_3_clicked();
 
-    void on_pushButton_4_clicked();
 
-    void on_pushButton_5_clicked();
 
-    void on_pushButton_6_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -155,7 +201,6 @@ private:
     QMediaPlayer * sinkSound = new QMediaPlayer();
     QMediaPlayer * hitSound = new QMediaPlayer();
     QMediaPlayer * waterSound = new QMediaPlayer();
-
 };
 
 #endif // MAINWINDOW_H

@@ -1,4 +1,18 @@
+/*!
+*@file game.cpp
+*@brief Funkcje z tej biblioteki zawierają mechanizmy do obsługi rozgrywki - sprawdzanie sytuacji, w których statek został trafiony, nietrafiony lub zatopiony.
+*/
+
 #include "game.h"
+
+
+
+
+
+
+
+//------------ PUBLIC ------------
+
 
 Game::Game(QTableWidget *z, QTableWidgetItem *pItem){
     myBoard = z;

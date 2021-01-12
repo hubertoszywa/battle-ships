@@ -1,3 +1,9 @@
+/*!
+*@file mainwindow.cpp
+*@brief Funkcje z tej biblioteki zawierają mechanizmy pozwalające na detekcję ruchów gracza oraz decydowanie o tym czyja jest kolej na oddanie strzału - gracza czy bota. Również tutaj ustalane są efekty dźwiękowe oraz działanie menu gry.
+*/
+
+
 #include "mainwindow.h"
 #include "board.h"
 #include "game.h"
