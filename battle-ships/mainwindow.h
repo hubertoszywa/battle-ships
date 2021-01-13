@@ -3,6 +3,14 @@
 *@brief Plik nagłówkowy do biblioteki mainwindows.cpp, przechowuje deklaracje funkcji.
 */
 
+
+/** @mainpage Programowanie w języku C 2 (projekt 2020/2021)
+*@brief --- Politechnika Świętokrzyska 2020 / 2021, studia niestacjonarne - semestr III. ----
+*@brief Wydział Elektrotechniki, Automatyki i Informatyki. Kierunek: Informatyka
+*@brief Temat: Gra Statki. Przeciwnikiem komputer.
+*@authors Hubert Oszywa (GR 2IZ12A), Hubert Michnicki (GR 2IZ12A), Jaroslaw Majcherczyk (GR 2IZ12A)
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

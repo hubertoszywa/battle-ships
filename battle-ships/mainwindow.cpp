@@ -92,15 +92,7 @@ void MainWindow::delay(int secs)
 
 
 
-
-
-
-
-
-
-
-
-/* main window */
+/* ------------ main window ------------*/
 
 
 void MainWindow::on_buttonNewGame_clicked()
@@ -170,7 +162,7 @@ void MainWindow::on_buttonRules_clicked()
 
 void MainWindow::on_buttonAuthors_clicked()
 {
-    QString authorsText = "Hubert Oszywa - 12A \nHubert Michnicki - 12 \nJarosław Majecherczyk - 12A";
+    QString authorsText = "Hubert Oszywa - 12A \nHubert Michnicki - 12A \nJarosław Majecherczyk - 12A";
     QMessageBox::about(this, "Autorzy", authorsText);
 }
 
@@ -187,17 +179,7 @@ void MainWindow::on_buttonExit_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
-
-/*  optionGamePage   */
+/*  ------------ optionGamePage ------------ */
 
 void MainWindow::fillSpinBoxes()
 {
@@ -265,18 +247,7 @@ void MainWindow::on_pushButton_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*  rulesPage   */
+/*  ------------ rulesPage ------------ */
 
 void MainWindow::on_buttonBackToMenuFromRules_clicked()
 {
@@ -285,19 +256,7 @@ void MainWindow::on_buttonBackToMenuFromRules_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*  before game  */
+/* ------------ before game ------------ */
 
 void MainWindow::preparingToPlay() {
     srand(time(NULL));
@@ -368,19 +327,7 @@ void MainWindow::preparingToPlay() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*  after game  */
+/* ------------ after game ------------  */
 
 void MainWindow::showSummaryPage()
 {
@@ -421,21 +368,7 @@ void MainWindow::on_pushButton_2_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ruch bota */
+/* ------------ ruch bota ------------*/
 
 void MainWindow::botMove()
 {
@@ -517,13 +450,7 @@ void MainWindow::botMove()
 
 
 
-
-
-
-
-
-
-/* ruch gracza */
+/* ------------ ruch gracza ------------ */
 
 void MainWindow::theGame( QTableWidgetItem *userShot )
 {
@@ -592,14 +519,6 @@ void MainWindow::theGame( QTableWidgetItem *userShot )
         botMove();
     }
 }
-
-
-
-
-
-
-
-
 
 
 /* wybranie odpowiedniego pola strzalu dla bota w zaleznosci od poziomu trudnosci*/
@@ -768,10 +687,7 @@ Point MainWindow::fieldBasedLvl(int level)
 
 
 
-/* najlepsze wyniki */
-
-
-
+/* ------------ najlepsze wyniki ------------ */
 
 void MainWindow::on_buttonBackToMenu_5_clicked()
 {
